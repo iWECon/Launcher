@@ -8,13 +8,12 @@ fileprivate var AppDelegateConfigurableWindowKey = "AppDelegateConfigurable.Wind
 
 public protocol AppDelegateConfigurable {
     
-    var window: UIWindow { get set }
-    
     var delegates: [UIApplicationDelegate] { get }
     
     func configure(window: UIWindow)
     
     func prepareRootController(firstLaunch isFirstLaunch: Bool)
+    
 }
 
 public extension AppDelegateConfigurable {
@@ -23,19 +22,4 @@ public extension AppDelegateConfigurable {
         []
     }
     
-    var window: UIWindow {
-        get {
-            guard let window = objc_getAssociatedObject(self, &AppDelegateConfigurableWindowKey) as? UIWindow else {
-                let window = UIWindow(frame: UIScreen.main.bounds)
-                objc_setAssociatedObject(self, &AppDelegateConfigurableWindowKey, window, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-                return window
-            }
-            return window
-        }
-        set {
-            objc_setAssociatedObject(self, &AppDelegateConfigurableWindowKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    func configure(window: UIWindow) { }
 }

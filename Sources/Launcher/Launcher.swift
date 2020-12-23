@@ -44,11 +44,11 @@ public class Launcher: UIResponder {
         
         configurable.delegates.forEach({ let _ = $0.application?(application, didFinishLaunchingWithOptions: launchOptions) })
         
-        self.window = configurable.window
-        appDelegate.setValue(configurable.window, forKey: "window")
-        configurable.configure(window: configurable.window)
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        configurable.configure(window: self.window)
         
         configurable.prepareRootController(firstLaunch: true)
+        
         return true
     }
     
