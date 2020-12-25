@@ -31,6 +31,7 @@ public class Launcher: UIResponder {
             tools.toolsConfigure()
         }
         
+        // BOLD SIZE
         if UIAccessibility.isBoldTextEnabled {
             UILabel.appearance(whenContainedInInstancesOf: [UIButton.self]).lineBreakMode = .byClipping
         }

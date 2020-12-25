@@ -10,11 +10,13 @@ let package = Package(
     ],
     products: [
         .library(name: "Launcher", targets: ["Launcher"]),
-        .library(name: "TabProvider", targets: ["TabProvider"])
+        .library(name: "TabProvider", targets: ["TabProvider"]),
+        .library(name: "RootController", targets: ["RootController"])
     ],
     targets: [
         .target(name: "Launcher", dependencies: ["TabProvider"]),
         .target(name: "TabProvider"),
+        .target(name: "RootController", dependencies: ["TabProvider"]),
         .testTarget(
             name: "LauncherTests",
             dependencies: ["Launcher"]),

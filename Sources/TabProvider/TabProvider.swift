@@ -4,3 +4,12 @@
 
 import UIKit
 
+public protocol TabProvider {
+    
+    var tabIdentifier: String { get }
+    
+    var tabName: String { get }
+    var tabImageName: String { get }
+    
+    var controller: UIViewController { get }
+}
