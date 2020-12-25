@@ -16,7 +16,7 @@ let package = Package(
     targets: [
         .target(name: "Launcher", dependencies: ["TabProvider"]),
         .target(name: "TabProvider"),
-        .target(name: "RootController", dependencies: ["TabProvider"]),
+        .target(name: "RootController", dependencies: ["TabProvider", "Launcher"]),
         .testTarget(
             name: "LauncherTests",
             dependencies: ["Launcher"]),
