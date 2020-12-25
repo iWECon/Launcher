@@ -79,16 +79,14 @@ open class RootController: UIViewController {
         currentController = tabProviders.first!.controller
         setNeedsStatusBarAppearanceUpdate()
         
-        
+        controllerContainerView.backgroundColor = .yellow
+        view.addSubview(controllerContainerView)
+        // constraint controllerContainerView
         let topConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
         let leftConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0)
         let rightConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0)
         let bottomConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .bottomMargin, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 49 + Screen.safeArea.bottom)
         controllerContainerView.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
-        
-        controllerContainerView.backgroundColor = .yellow
-        
-        view.addSubview(controllerContainerView)
     }
     
     /// call when is initial run
