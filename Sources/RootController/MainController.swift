@@ -113,8 +113,8 @@ open class RootController: UIViewController, UITabBarDelegate {
         let bottomConstraint = NSLayoutConstraint(item: tabBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
         let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
         
-        view.addConstraints([leftConstraint, rightConstraint, bottomConstraint])
-        controllerContainerView.addConstraint(topConstraint)
+        view.addConstraints([leftConstraint, rightConstraint, bottomConstraint, topConstraint])
+        //controllerContainerView.addConstraint(topConstraint)
     }
     
     /// call when is initial run
