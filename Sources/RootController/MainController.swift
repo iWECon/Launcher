@@ -167,6 +167,8 @@ private extension RootController {
         }
         
         func replaceCurrentControllerViewConstraint(_ controlerView: UIView) {
+            guard currentController.view != controlerView else { return }
+            
             // remove old constrains
             let oldConstraints = controllerContainerView.constraints.filter({ $0.identifier == "a" })
             controllerContainerView.removeConstraints(oldConstraints)
