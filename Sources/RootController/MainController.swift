@@ -15,6 +15,7 @@ private struct Screen {
             }
             return Launcher.shared.window.safeAreaInsets
         }
+        return .zero
     }()
 }
 
