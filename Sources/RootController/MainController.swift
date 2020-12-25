@@ -169,6 +169,8 @@ private extension RootController {
         func replaceCurrentControllerViewConstraint(_ controllerView: UIView) {
             guard currentController.view != controllerView else { return }
             
+            controllerView.translatesAutoresizingMaskIntoConstraints = false
+            
             controllerView.addConstraints([
                 .init(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
                 .init(item: controllerContainerView, attribute: .left, relatedBy: .equal, toItem: controllerView, attribute: .left, multiplier: 1, constant: 0),
