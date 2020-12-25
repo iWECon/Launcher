@@ -173,18 +173,23 @@ private extension RootController {
             let oldConstraints = controllerContainerView.constraints.filter({ $0.identifier == "a" })
             controllerContainerView.removeConstraints(oldConstraints)
             
-            // new constraints
-            let left = NSLayoutConstraint(item: controlerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0)
-            left.identifier = "a"
-            let right = NSLayoutConstraint(item: controlerView, attribute: .right, relatedBy: .equal, toItem: controllerContainerView, attribute: .right, multiplier: 1, constant: 0)
-            right.identifier = "a"
-            let top = NSLayoutConstraint(item: controlerView, attribute: .top, relatedBy: .equal, toItem: controllerContainerView, attribute: .top, multiplier: 1, constant: 0)
-            top.identifier = "a"
-            let bottom = NSLayoutConstraint(item: controlerView, attribute: .bottom, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
-            bottom.identifier = "a"
+            controlerView.leftAnchor.constraint(equalTo: controllerContainerView.leftAnchor).isActive = true
+            controlerView.rightAnchor.constraint(equalTo: controllerContainerView.rightAnchor).isActive = true
+            controlerView.topAnchor.constraint(equalTo: controllerContainerView.topAnchor).isActive = true
+            controlerView.bottomAnchor.constraint(equalTo: controllerContainerView.bottomAnchor).isActive = true
+            
+//            // new constraints
+//            let left = NSLayoutConstraint(item: controlerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0)
+//            left.identifier = "a"
+//            let right = NSLayoutConstraint(item: controlerView, attribute: .right, relatedBy: .equal, toItem: controllerContainerView, attribute: .right, multiplier: 1, constant: 0)
+//            right.identifier = "a"
+//            let top = NSLayoutConstraint(item: controlerView, attribute: .top, relatedBy: .equal, toItem: controllerContainerView, attribute: .top, multiplier: 1, constant: 0)
+//            top.identifier = "a"
+//            let bottom = NSLayoutConstraint(item: controlerView, attribute: .bottom, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
+//            bottom.identifier = "a"
             
             // add constraints
-            controllerContainerView.addConstraints([left, right, top, bottom])
+//            controllerContainerView.addConstraints([left, right, top, bottom])
         }
         
         currentIndex = index
