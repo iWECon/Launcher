@@ -166,19 +166,19 @@ private extension RootController {
             return
         }
         
-        func replaceCurrentControllerViewConstraint(view: UIView) {
+        func replaceCurrentControllerViewConstraint(_ controlerView: UIView) {
             // remove old constrains
             let oldConstraints = controllerContainerView.constraints.filter({ $0.identifier == "a" })
             controllerContainerView.removeConstraints(oldConstraints)
             
             // new constraints
-            let left = NSLayoutConstraint(item: view, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0)
+            let left = NSLayoutConstraint(item: controlerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0)
             left.identifier = "a"
-            let right = NSLayoutConstraint(item: view, attribute: .right, relatedBy: .equal, toItem: controllerContainerView, attribute: .right, multiplier: 1, constant: 0)
+            let right = NSLayoutConstraint(item: controlerView, attribute: .right, relatedBy: .equal, toItem: controllerContainerView, attribute: .right, multiplier: 1, constant: 0)
             right.identifier = "a"
-            let top = NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: controllerContainerView, attribute: .top, multiplier: 1, constant: 0)
+            let top = NSLayoutConstraint(item: controlerView, attribute: .top, relatedBy: .equal, toItem: controllerContainerView, attribute: .top, multiplier: 1, constant: 0)
             top.identifier = "a"
-            let bottom = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
+            let bottom = NSLayoutConstraint(item: controlerView, attribute: .bottom, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
             bottom.identifier = "a"
             
             // add constraints
@@ -200,7 +200,7 @@ private extension RootController {
         addChild(currentController)
         currentController.willMove(toParent: self)
         controllerContainerView.addSubview(currentController.view)
-        replaceCurrentControllerViewConstraint(view: currentController.view)
+        replaceCurrentControllerViewConstraint(currentController.view)
         currentController.didMove(toParent: self)
         setNeedsStatusBarAppearanceUpdate()
         
