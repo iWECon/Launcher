@@ -171,7 +171,7 @@ private extension RootController {
             
             controllerView.translatesAutoresizingMaskIntoConstraints = false
             
-            controllerView.addConstraints([
+            controllerContainerView.addConstraints([
                 .init(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
                 .init(item: controllerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0),
                 .init(item: controllerContainerView, attribute: .right, relatedBy: .equal, toItem: controllerView, attribute: .right, multiplier: 1, constant: 0),
