@@ -167,7 +167,7 @@ private extension RootController {
         }
         
         func replaceCurrentControllerViewConstraint(_ controllerView: UIView) {
-            guard currentController.view != controllerView else { return }
+            guard currentController.view != self.view else { return }
             
             controllerView.translatesAutoresizingMaskIntoConstraints = false
             
