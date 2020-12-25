@@ -19,6 +19,6 @@ let package = Package(
         .target(name: "RootController", dependencies: ["TabProvider", "Launcher"]),
         .testTarget(
             name: "LauncherTests",
-            dependencies: ["Launcher"]),
+            dependencies: ["Launcher", "RootController"]),
     ]
 )

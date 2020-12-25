@@ -74,19 +74,25 @@ open class RootController: UIViewController {
         
         // install tab providers
         if tabProviders.count <= 0  {
-            fatalError("implement at least one tabProvider")
+            // fatalError("implement at least one tabProvider")
+            currentController = self
+        } else {
+            currentController = tabProviders.first!.controller
         }
-        currentController = tabProviders.first!.controller
+        
         setNeedsStatusBarAppearanceUpdate()
         
         controllerContainerView.backgroundColor = .yellow
+        
         view.addSubview(controllerContainerView)
+        
         // constraint controllerContainerView
+        controllerContainerView.translatesAutoresizingMaskIntoConstraints = false
         let topConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
-        let leftConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .bottomMargin, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 49 + Screen.safeArea.bottom)
-        controllerContainerView.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
+        let leftConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
+        let rightConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
+        let bottomConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 49)
+        view.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
     }
     
     /// call when is initial run

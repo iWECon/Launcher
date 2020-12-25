@@ -1,5 +1,6 @@
 import XCTest
 @testable import Launcher
+@testable import RootController
 
 final class LaunchTests: XCTestCase {
     func testExample() {
@@ -7,9 +8,12 @@ final class LaunchTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
         
+        let r = RootController()
+        r.viewDidLoad()
     }
 
     static var allTests = [
         ("testExample", testExample),
     ]
 }
+                                               
