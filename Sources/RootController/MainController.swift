@@ -173,9 +173,9 @@ private extension RootController {
             
             controllerView.addConstraints([
                 .init(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
-                .init(item: controllerContainerView, attribute: .left, relatedBy: .equal, toItem: controllerView, attribute: .left, multiplier: 1, constant: 0),
+                .init(item: controllerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0),
                 .init(item: controllerContainerView, attribute: .right, relatedBy: .equal, toItem: controllerView, attribute: .right, multiplier: 1, constant: 0),
-                .init(item: controllerContainerView, attribute: .bottom, relatedBy: .equal, toItem: controllerView, attribute: .bottom, multiplier: 1, constant: 0),
+                .init(item: controllerView, attribute: .bottom, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0),
             ])
         }
         
