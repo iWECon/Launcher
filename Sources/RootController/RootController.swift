@@ -41,7 +41,7 @@ open class RootController: UIViewController, UITabBarDelegate {
     open var initialTabIndex = 0
     
     public var isInitial = false
-    public var controllerContainerView = UIView()
+    public var contentView = UIView()
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -78,20 +78,18 @@ open class RootController: UIViewController, UITabBarDelegate {
         
         // install tab providers
         if tabProviders.count <= 0  {
-            // fatalError("implement at least one tabProvider")
-            currentController = self
+            setNeedsStatusBarAppearanceUpdate()
+            return
         } else {
             currentController = tabProviders.first!.controller
         }
         
         setNeedsStatusBarAppearanceUpdate()
         
-        controllerContainerView.backgroundColor = .yellow
+        view.addSubview(contentView)
         
-        view.addSubview(controllerContainerView)
-        
-        // constraint controllerContainerView
-        controllerContainerView.translatesAutoresizingMaskIntoConstraints = false
+        // constraint contentView
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         constraintsControllerContainerView()
         
         // setup tab bar
@@ -112,12 +110,10 @@ open class RootController: UIViewController, UITabBarDelegate {
     }
     
     open func constraintsControllerContainerView() {
-        guard controllerContainerView != view else { return }
-        
-        let topConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
-        let leftConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -(49 + Screen.safeArea.bottom))
+        let topConstraint = NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
+        let leftConstraint = NSLayoutConstraint(item: contentView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
+        let rightConstraint = NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
+        let bottomConstraint = NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -(49 + Screen.safeArea.bottom))
         
         view.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
     }
@@ -126,7 +122,7 @@ open class RootController: UIViewController, UITabBarDelegate {
         let leftConstraint = NSLayoutConstraint(item: tabBar, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
         let rightConstraint = NSLayoutConstraint(item: tabBar, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
         let bottomConstraint = NSLayoutConstraint(item: tabBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
-        let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .top, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
+        let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0)
         
         view.addConstraints([leftConstraint, rightConstraint, bottomConstraint, topConstraint])
     }
@@ -186,11 +182,11 @@ private extension RootController {
             controllerView.translatesAutoresizingMaskIntoConstraints = false
             
             // shit
-            controllerContainerView.addConstraints([
-                .init(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
-                .init(item: controllerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0),
-                .init(item: controllerContainerView, attribute: .right, relatedBy: .equal, toItem: controllerView, attribute: .right, multiplier: 1, constant: 0),
-                .init(item: controllerView, attribute: .bottom, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0),
+            contentView.addConstraints([
+                .init(item: contentView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
+                .init(item: controllerView, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1, constant: 0),
+                .init(item: contentView, attribute: .right, relatedBy: .equal, toItem: controllerView, attribute: .right, multiplier: 1, constant: 0),
+                .init(item: controllerView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0),
             ])
         }
         
@@ -208,7 +204,7 @@ private extension RootController {
         currentController = tabProvider.controller
         addChild(currentController)
         currentController.willMove(toParent: self)
-        controllerContainerView.addSubview(currentController.view)
+        contentView.addSubview(currentController.view)
         replaceCurrentControllerViewConstraint(currentController.view)
         currentController.didMove(toParent: self)
         setNeedsStatusBarAppearanceUpdate()
