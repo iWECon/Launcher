@@ -9,10 +9,14 @@ public protocol TabProvider {
     var tabIdentifier: String { get }
     
     var tabTitle: String { get }
+    /// the selected image name use: tabImageName + "_sel"
     var tabImageName: String { get }
     
     var tabBarItem: UITabBarItem { get }
     var controller: UIViewController { get }
+    
+    func cleanup()
+    func set(badge: Int)
 }
 
 
@@ -28,4 +32,6 @@ public extension TabProvider {
         return item
     }
     
+    func cleanup() { }
+    func set(badge: Int) { }
 }

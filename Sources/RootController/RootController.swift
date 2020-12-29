@@ -37,28 +37,32 @@ open class RootController: UIViewController, UITabBarDelegate {
     
     /// tabbar's tab providers
     open var tabProviders: [TabProvider] = []
-    
-    public var controllerContainerView = UIView()
+    /// tabbar selected index initial value
+    open var initialTabIndex = 0
     
     public var isInitial = false
+    public var controllerContainerView = UIView()
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
-        _commonInit()
+        commonInit()
     }
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
         
-        _commonInit()
+        commonInit()
     }
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
     }
     
-    private func _commonInit() {
+    /// do not make time-consuming tasks
+    /// you can listen some notify
+    /// call before viewDidLoad
+    open func commonInit() {
         
     }
     
@@ -90,13 +94,21 @@ open class RootController: UIViewController, UITabBarDelegate {
         controllerContainerView.translatesAutoresizingMaskIntoConstraints = false
         constraintsControllerContainerView()
         
-        if let tabBarProvider = self as? TabBarProvider {
-            view.addSubview(tabBarProvider.tabBar)
-            tabBarProvider.tabBar.delegate = self
-            tabBarProvider.tabBar.setItems(tabProviders.compactMap({ $0.tabBarItem }), animated: true)
-            tabBarProvider.tabBar.translatesAutoresizingMaskIntoConstraints = false
-            constraintsTabBar(tabBar: tabBarProvider.tabBar)
+        // setup tab bar
+        guard let tabBarProvider = self as? TabBarProvider else {
+            return
         }
+        tabBarProvider.tabBar.delegate = self
+        tabBarProvider.tabBar.setItems(tabProviders.compactMap({ $0.tabBarItem }), animated: true)
+        for (idx, item) in (tabBarProvider.tabBar.items ?? []).enumerated() {
+            item.tag = idx
+        }
+        view.addSubview(tabBarProvider.tabBar)
+        
+        tabBarProvider.tabBar.translatesAutoresizingMaskIntoConstraints = false
+        constraintsTabBar(tabBar: tabBarProvider.tabBar)
+        
+        tabBarSelectItem(at: 0)
     }
     
     open func constraintsControllerContainerView() {
@@ -171,6 +183,7 @@ private extension RootController {
             
             controllerView.translatesAutoresizingMaskIntoConstraints = false
             
+            // shit
             controllerContainerView.addConstraints([
                 .init(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
                 .init(item: controllerView, attribute: .left, relatedBy: .equal, toItem: controllerContainerView, attribute: .left, multiplier: 1, constant: 0),
