@@ -112,10 +112,13 @@ open class RootController: UIViewController, UITabBarDelegate {
     }
     
     open func constraintsControllerContainerView() {
+        guard controllerContainerView != view else { return }
+        
         let topConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
         let leftConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
         let rightConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
         let bottomConstraint = NSLayoutConstraint(item: controllerContainerView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -(49 + Screen.safeArea.bottom))
+        
         view.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
     }
     
@@ -126,7 +129,6 @@ open class RootController: UIViewController, UITabBarDelegate {
         let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .top, relatedBy: .equal, toItem: controllerContainerView, attribute: .bottom, multiplier: 1, constant: 0)
         
         view.addConstraints([leftConstraint, rightConstraint, bottomConstraint, topConstraint])
-        //controllerContainerView.addConstraint(topConstraint)
     }
     
     /// call when is initial run
