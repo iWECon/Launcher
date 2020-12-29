@@ -95,7 +95,7 @@ open class RootController: UIViewController, UITabBarDelegate {
         constraintsControllerContainerView()
         
         // setup tab bar
-        guard let tabBarProvider = self as? TabBarProvider else {
+        guard let tabBarProvider = self as? TabBarProvider, tabProviders.count > 0 else {
             return
         }
         tabBarProvider.tabBar.delegate = self
