@@ -49,8 +49,9 @@ open class RootController: UIViewController, UITabBarDelegate {
         commonInit()
     }
     
-    convenience init() {
+    convenience init(initial: Bool = false) {
         self.init(nibName: nil, bundle: nil)
+        self.isInitial = initial
     }
     
     /// do not make time-consuming tasks
