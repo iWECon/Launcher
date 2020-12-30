@@ -31,17 +31,11 @@ open class RootController: UIViewController, UITabBarDelegate {
         return .default
     }
     
+    public var isInitial = false
+    
     /// return the current tab's root controller
     public private(set) var currentController: UIViewController!
-    
-    
-    /// tabbar's tab providers
-    open var tabProviders: [TabProvider] = []
-    /// tabbar selected index initial value
-    open var initialTabIndex = 0
-    
-    public var isInitial = false
-    public var contentView = UIView()
+    public private(set) lazy var contentView = UIView()
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -76,40 +70,38 @@ open class RootController: UIViewController, UITabBarDelegate {
         
         navigationController?.isNavigationBarHidden = true
         
-        // install tab providers
-        if tabProviders.count <= 0  {
-            setNeedsStatusBarAppearanceUpdate()
-            return
-        } else {
-            currentController = tabProviders.first!.controller
-        }
-        
         setNeedsStatusBarAppearanceUpdate()
         
+        // setup tab bar
+        guard let tabBarProvider = self as? TabBarProvider,
+              tabBarProvider.tabProviders.count > 0
+        else {
+            return
+        }
         view.addSubview(contentView)
         
         // constraint contentView
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         constraintsControllerContainerView()
         
-        // setup tab bar
-        guard let tabBarProvider = self as? TabBarProvider, tabProviders.count > 0 else {
-            return
-        }
+        // install tab providers
+        // find the intialTabIdentifier's controller
+        let initialProvider = tabBarProvider.tabProviders.enumerated().filter({ $0.element.tabIdentifier == tabBarProvider.initialTabIdentifier }).first
+        currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller
+        
         tabBarProvider.tabBar.delegate = self
-        tabBarProvider.tabBar.setItems(tabProviders.compactMap({ $0.tabBarItem }), animated: true)
+        tabBarProvider.tabBar.setItems(tabBarProvider.tabProviders.compactMap({ $0.tabBarItem }), animated: false)
         for (idx, item) in (tabBarProvider.tabBar.items ?? []).enumerated() {
             item.tag = idx
         }
         view.addSubview(tabBarProvider.tabBar)
-        
-        tabBarProvider.tabBar.translatesAutoresizingMaskIntoConstraints = false
         constraintsTabBar(tabBar: tabBarProvider.tabBar)
         
-        tabBarSelectItem(at: 0)
+        tabBarSelectItem(at: initialProvider?.offset ?? 0)
     }
     
     open func constraintsControllerContainerView() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
         let topConstraint = NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
         let leftConstraint = NSLayoutConstraint(item: contentView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
         let rightConstraint = NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
@@ -119,6 +111,8 @@ open class RootController: UIViewController, UITabBarDelegate {
     }
     
     open func constraintsTabBar(tabBar: UITabBar) {
+        tabBar.translatesAutoresizingMaskIntoConstraints = false
+        
         let leftConstraint = NSLayoutConstraint(item: tabBar, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
         let rightConstraint = NSLayoutConstraint(item: tabBar, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
         let bottomConstraint = NSLayoutConstraint(item: tabBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
@@ -163,8 +157,9 @@ private extension RootController {
     
     func tabBarSelectItem(at index: Int, skipRefresh: Bool, segment: Any? = nil) {
         guard let tabBarProvider = self as? TabBarProvider else { return }
-        var currentIndex = tabBarProvider.currentIndex
+        var currentIndex = tabBarProvider.tabBarCurrentIndex
         let tabBar = tabBarProvider.tabBar
+        let tabProviders = tabBarProvider.tabProviders
         
         guard index != currentIndex else {
             

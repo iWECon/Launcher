@@ -4,16 +4,23 @@
 
 import UIKit
 
-private var __TabBarKey = "__Launcher.TabProvider.TabBarProvider.TabBarKey"
+struct TabBarProviderKeys {
+    static var tabBarKey = "__Launcher.TabProvider.TabBarProvider.TabBarKey"
+    static var tabBarCurrentIndexKey = "__Launcher.TabProvider.TabBarProvider.TabBarKey"
+}
 
 public protocol TabBarProvider {
     
-    var tabBarTintColor: UIColor? { get set }
-    
     var tabBar: UITabBar { get set }
     
+    /// tabbar's tab providers
+    var tabProviders: [TabProvider] { get set }
+    
     /// index of the tabbar's tab
-    var currentIndex: Int { get set }
+    var tabBarCurrentIndex: Int { get set }
+    
+    /// tabbar selected index initial value
+    var initialTabIdentifier: String? { get set }
     
     /// setTitleTextAttributes or other something
     func configure(tabBarItems: [UITabBarItem])
@@ -22,19 +29,28 @@ public protocol TabBarProvider {
 
 public extension TabBarProvider {
     
+    var tabProviders: [TabProvider] {
+        []
+    }
+    
+    var tabBarCurrentIndex: Int {
+        0
+    }
+    
+    var initialTabIdentifier: String? {
+        nil
+    }
+    
     var tabBar: UITabBar {
         get {
-            guard let tabBar = objc_getAssociatedObject(self, &__TabBarKey) as? UITabBar else {
+            guard let tabBar = objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarKey) as? UITabBar else {
                 let tabBar = UITabBar()
                 tabBar.isTranslucent = false
-                tabBar.tintColor = tabBarTintColor
                 tabBar.shadowImage = UIImage()
                 tabBar.backgroundImage = UIImage()
                 tabBar.clipsToBounds = false
-                tabBar.layer.shadowColor = UIColor(red: 189 / 255.0, green: 189 / 255.0, blue: 189 / 255.0, alpha: 0.5).cgColor
-                tabBar.layer.shadowOpacity = 1.0
                 
-                objc_setAssociatedObject(self, &__TabBarKey, tabBar, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarKey, tabBar, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
                 
                 return tabBar
             }
@@ -42,8 +58,9 @@ public extension TabBarProvider {
         }
         
         set {
-            objc_setAssociatedObject(self, &__TabBarKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
+    func configure(tabBarItems: [UITabBarItem]) { }
 }
