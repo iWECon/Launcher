@@ -49,7 +49,7 @@ open class RootController: UIViewController, UITabBarDelegate {
         commonInit()
     }
     
-    convenience init(initial: Bool = false) {
+    public convenience init(initial: Bool = false) {
         self.init(nibName: nil, bundle: nil)
         self.isInitial = initial
     }
