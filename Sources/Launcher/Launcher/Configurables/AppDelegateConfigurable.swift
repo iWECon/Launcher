@@ -12,7 +12,7 @@ public protocol AppDelegateConfigurable {
     
     func configure(window: UIWindow)
     
-    func prepareRootController(firstLaunch isFirstLaunch: Bool)
+    func prepareRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController
     
 }
 

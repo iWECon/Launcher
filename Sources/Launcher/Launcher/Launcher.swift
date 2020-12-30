@@ -48,7 +48,7 @@ public class Launcher: UIResponder {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         configurable.configure(window: self.window)
         
-        configurable.prepareRootController(firstLaunch: true)
+        prepareRootController(firstLaunch: true)
         
         return true
     }
@@ -64,7 +64,13 @@ public class Launcher: UIResponder {
     /// prepare root controller
     /// - Parameter firstLaunch: Default is `false`
     public func prepareRootController(firstLaunch: Bool = false) {
-        appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch)
+        var controller = appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch)
+        
+        if let rootNavProvider = controller as? RootNavigationProvider {
+            controller = rootNavProvider.wrapRootNavigationControler()
+        }
+        
+        self.window.rootViewController = controller
     }
     
 }

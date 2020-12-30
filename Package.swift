@@ -10,8 +10,7 @@ let package = Package(
     ],
     products: [
         .library(name: "Launcher", targets: ["Launcher"]),
-        .library(name: "TabProvider", targets: ["TabProvider"]),
-        .library(name: "RootController", targets: ["RootController"])
+        .library(name: "TabProvider", targets: ["TabProvider"])
     ],
     dependencies: [
         .package(name: "RTNavigationController", url: "https://github.com/iWECon/RTNavigationController", from: "5.0.0")
@@ -19,9 +18,8 @@ let package = Package(
     targets: [
         .target(name: "Launcher", dependencies: ["TabProvider", "RTNavigationController"]),
         .target(name: "TabProvider"),
-        .target(name: "RootController", dependencies: ["TabProvider", "Launcher"]),
         .testTarget(
             name: "LauncherTests",
-            dependencies: ["Launcher", "RootController"]),
+            dependencies: ["Launcher"]),
     ]
 )

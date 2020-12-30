@@ -1,6 +1,5 @@
 import XCTest
 @testable import Launcher
-@testable import RootController
 
 final class LaunchTests: XCTestCase {
     func testExample() {
