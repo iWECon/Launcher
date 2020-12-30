@@ -42,7 +42,7 @@ public extension TabBarProvider where Self: UIViewController {
     
     var tabBarCurrentIndex: Int {
         get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey) as? Int ?? 0
+            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey) as? Int ?? -1
         }
         set {
             objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey, newValue, .OBJC_ASSOCIATION_ASSIGN)
