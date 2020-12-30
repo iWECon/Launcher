@@ -10,18 +10,11 @@ import RTNavigationController
 /// use `window.rootViewController = RootController/orSubClass.wrapRootNavigationController(initial:)`
 public protocol RootNavigationProvider {
     
-    static func wrapRootNavigationControler(initial: Bool) -> RTRootNavigationController
     func wrapRootNavigationControler() -> RTRootNavigationController
     
 }
 
 public extension RootNavigationProvider where Self: RootController {
-    
-    static func wrapRootNavigationControler(initial: Bool) -> RTRootNavigationController {
-        let vc = Self()
-        vc.isInitial = initial
-        return RTRootNavigationController(rootViewController: vc)
-    }
     
     func wrapRootNavigationControler() -> RTRootNavigationController {
         RTRootNavigationController(rootViewController: self)

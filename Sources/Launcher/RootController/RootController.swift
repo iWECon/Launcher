@@ -4,7 +4,6 @@
 
 import UIKit
 import TabProvider
-import Launcher
 
 private struct Screen {
     static var safeArea: UIEdgeInsets = {
@@ -197,7 +196,11 @@ private extension RootController {
             currentController.didMove(toParent: nil)
         }
         let tabProvider = tabProviders[currentIndex]
-        currentController = tabProvider.controller
+        var controller = tabProvider.controller
+        if let containerProvider = tabProvider as? ContainerNavigationProvider {
+            controller = containerProvider.wrapContainerNavigationController()
+        }
+        currentController = controller
         addChild(currentController)
         currentController.willMove(toParent: self)
         contentView.addSubview(currentController.view)
