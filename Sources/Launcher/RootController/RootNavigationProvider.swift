@@ -15,7 +15,7 @@ public protocol RootNavigationProvider {
     
 }
 
-extension RootNavigationProvider where Self: RootController {
+public extension RootNavigationProvider where Self: RootController {
     
     static func wrapRootNavigationControler(initial: Bool) -> RTRootNavigationController {
         let vc = Self()
