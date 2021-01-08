@@ -64,7 +64,7 @@ public class Launcher: UIResponder {
     /// prepare root controller
     /// - Parameter firstLaunch: Default is `false`
     public func prepareRootController(firstLaunch: Bool = false) {
-        guard var controller = appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch) else {
+        guard var controller = appDelegateConfigurable.autoSetRootController(firstLaunch: firstLaunch) else {
             appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch)
             return
         }
