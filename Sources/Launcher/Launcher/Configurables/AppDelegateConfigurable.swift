@@ -12,8 +12,12 @@ public protocol AppDelegateConfigurable {
     
     func configure(window: UIWindow)
     
-    func prepareRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController
+    // 二选一
+    /// 自动设置根控制器，业务功能简单的情况下可以用方法直接处理
+    func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController?
     
+    /// 业务逻辑复杂的可以走这个自定义，需要手动设置：window.rootViewController
+    func prepareRootController(firstLaunch isFirstLaunch: Bool)
 }
 
 public extension AppDelegateConfigurable {
@@ -22,4 +26,7 @@ public extension AppDelegateConfigurable {
         []
     }
     
+    func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController?
+    
+    func prepareRootController(firstLaunch isFirstLaunch: Bool) { }
 }

@@ -64,13 +64,15 @@ public class Launcher: UIResponder {
     /// prepare root controller
     /// - Parameter firstLaunch: Default is `false`
     public func prepareRootController(firstLaunch: Bool = false) {
-        var controller = appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch)
-        
+        guard var controller = appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch) else {
+            appDelegateConfigurable.prepareRootController(firstLaunch: firstLaunch)
+            return
+        }
         if let rootNavProvider = controller as? RootNavigationProvider {
             controller = rootNavProvider.wrapRootNavigationControler()
         }
-        
         self.window.rootViewController = controller
+        self.window.makeKeyAndVisible()
     }
     
 }
