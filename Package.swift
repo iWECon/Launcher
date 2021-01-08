@@ -10,14 +10,22 @@ let package = Package(
     ],
     products: [
         .library(name: "Launcher", targets: ["Launcher"]),
-        .library(name: "TabProvider", targets: ["TabProvider"])
+        .library(name: "TabProvider", targets: ["TabProvider"]),
     ],
     dependencies: [
-        .package(name: "RTNavigationController", url: "https://github.com/iWECon/RTNavigationController", from: "5.0.0")
+        .package(url: "https://github.com/iWECon/RTNavigationController", from: "5.0.0"),
+        .package(url: "https://github.com/iWECon/SegmentedController", from: "1.0.0")
     ],
     targets: [
-        .target(name: "Launcher", dependencies: ["TabProvider", "RTNavigationController"]),
         .target(name: "TabProvider"),
+        .target(
+            name: "Launcher",
+            dependencies: [
+                "TabProvider",
+                "RTNavigationController",
+                "SegmentedController"
+            ]
+        ),
         .testTarget(
             name: "LauncherTests",
             dependencies: ["Launcher"]),

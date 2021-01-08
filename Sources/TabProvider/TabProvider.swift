@@ -4,6 +4,11 @@
 
 import UIKit
 
+
+struct TabProviderKeys {
+    static var tabInitialSegmentedIndexKey = "__Launcher.TabProvider.tabInitialSegmentedIndexKey"
+}
+
 public protocol TabProvider {
     
     var tabIdentifier: String { get }
@@ -15,7 +20,9 @@ public protocol TabProvider {
     var tabBarItem: UITabBarItem { get }
     var controller: UIViewController { get }
     
+    /// clear controller if needed
     func cleanup()
+    /// badges update
     func set(badge: Int)
 }
 

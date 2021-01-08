@@ -2,12 +2,48 @@
   "object": {
     "pins": [
       {
+        "package": "Pager",
+        "repositoryURL": "https://github.com/iWECon/Pager",
+        "state": {
+          "branch": null,
+          "revision": "9c5dcfddf1dd00002431d90a7e31ee5d28b7ea5b",
+          "version": "1.0.4"
+        }
+      },
+      {
         "package": "RTNavigationController",
         "repositoryURL": "https://github.com/iWECon/RTNavigationController",
         "state": {
           "branch": null,
           "revision": "455c821607fb8565a35574cbf51136f607904f51",
           "version": "5.3.0"
+        }
+      },
+      {
+        "package": "SegmentedController",
+        "repositoryURL": "https://github.com/iWECon/SegmentedController",
+        "state": {
+          "branch": null,
+          "revision": "9693a9ec0802dd83a6023349e73b89a33395dd0f",
+          "version": "1.1.1"
+        }
+      },
+      {
+        "package": "Segmenter",
+        "repositoryURL": "https://github.com/iWECon/Segmenter",
+        "state": {
+          "branch": null,
+          "revision": "39b1a856bf2a7a1814f1502e4ae3ef35b9f44ecc",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "YTPageController",
+        "repositoryURL": "https://github.com/iWECon/YTPageController",
+        "state": {
+          "branch": null,
+          "revision": "53573a41bbe41f392291d3d6bcb8aecf5de4cebb",
+          "version": "1.1.1"
         }
       }
     ]

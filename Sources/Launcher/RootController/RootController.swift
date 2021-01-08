@@ -4,6 +4,8 @@
 
 import UIKit
 import TabProvider
+import Pager
+import SegmentedController
 
 private struct Screen {
     static var safeArea: UIEdgeInsets = {
@@ -130,6 +132,18 @@ open class RootController: UIViewController, UITabBarDelegate {
         animateTabItemSelection(at: item.tag)
         tabBarSelectItem(at: item.tag, skipRefresh: false)
     }
+    
+    open func segmentedControlDidChange(_ segmentedIndex: Int) {
+        guard segmentedIndex >= 0,
+           let pagable = currentController as? SegmentedControllerable,
+           segmentedIndex < pagable.pages.count
+        else {
+            return
+        }
+        
+        pagable.segmenter.currentIndex = segmentedIndex
+        pagable.pager.currentIndex = segmentedIndex
+    }
 }
 
 
@@ -163,11 +177,14 @@ private extension RootController {
         
         guard index != currentIndex else {
             
-//            if !skipRefresh, let current = currentController as? Refreshable {
-//                current.beginRefreshing()
-//                currentTabBar(change: segment)
-//            }
+            guard !skipRefresh,
+                  let refreshable = currentController as? Refreshable
+            else {
+                return
+            }
             
+            refreshable.beginRefreshing()
+            segmentedDidChange(segment)
             return
         }
         
@@ -208,28 +225,22 @@ private extension RootController {
         currentController.didMove(toParent: self)
         setNeedsStatusBarAppearanceUpdate()
         
-        currentTabBar(change: segment)
+        segmentedDidChange(segment)
     }
     
-    /// use Index: Int, or Identifier: String
-    func currentTabBar(change segment: Any?) {
+    private func segmentedDidChange(_ segment: Any?) {
         guard let segment = segment else {
             return
         }
-        var index: Int
+        var index: Int = 0
         if let segmentInt = segment as? Int {
             index = segmentInt
-        } else if let segmentIdentifier = segment as? String {
-            // index = segmentIdentifier
-            index = -1
+        } else if let segmentString = segment as? String,
+                  let segmentInt = Int(segmentString) {
+            index = segmentInt
         } else {
             return
         }
-//        if index >= 0, let pagable = currentController as? Pagable, index < pagable.pager.rootControllers.count {
-//            let pager = pagable.pager
-//            pager.segmenter?.currentIndex = index
-//            pager.currentIndex = index
-//        }
+        segmentedControlDidChange(index)
     }
-    
 }
