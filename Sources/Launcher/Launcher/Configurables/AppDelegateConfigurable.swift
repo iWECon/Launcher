@@ -26,7 +26,7 @@ public extension AppDelegateConfigurable {
         []
     }
     
-    func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController?
+    func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController? { nil }
     
     func prepareRootController(firstLaunch isFirstLaunch: Bool) { }
 }
