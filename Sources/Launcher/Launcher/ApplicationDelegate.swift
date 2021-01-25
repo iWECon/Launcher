@@ -19,6 +19,8 @@ open class ApplicationDelegate: UIResponder, UIApplicationDelegate, AppDelegateC
     
     open var window: UIWindow? = nil
     
+    open var delegates: [UIApplicationDelegate] = []
+    
     open func configure(window: UIWindow) {
         self.window = window
     }

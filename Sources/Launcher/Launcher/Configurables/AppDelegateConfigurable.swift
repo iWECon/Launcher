@@ -19,14 +19,3 @@ public protocol AppDelegateConfigurable {
     /// 业务逻辑复杂的可以走这个自定义，需要手动设置：window.rootViewController
     func prepareRootController(firstLaunch isFirstLaunch: Bool)
 }
-
-public extension AppDelegateConfigurable {
-    
-    var delegates: [UIApplicationDelegate] {
-        []
-    }
-    
-    func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController? { nil }
-    
-    func prepareRootController(firstLaunch isFirstLaunch: Bool) { }
-}
