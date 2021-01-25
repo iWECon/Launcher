@@ -106,6 +106,7 @@ open class RootController: UIViewController, UITabBarDelegate {
     }
     
     /// call when is initial run
+    /// override in subclass
     open func initialLoad() {
         
     }
@@ -131,9 +132,8 @@ open class RootController: UIViewController, UITabBarDelegate {
         }, completion: nil)
     }
     
-    open func tabBarItemDidChange(to index: Int) {
-        
-    }
+    /// override in subclass
+    open func tabBarItemDidChange(to index: Int) { }
 }
 
 private extension RootController {
@@ -169,8 +169,8 @@ private extension RootController {
     }
     
     func tabBarSelectItem(at index: Int, skipRefresh: Bool, segment: Any? = nil) {
-        guard let tabBarProvider = self as? TabBarProvider else { return }
-        var currentIndex = tabBarProvider.tabBarCurrentIndex
+        guard var tabBarProvider = self as? TabBarProvider else { return }
+        let currentIndex = tabBarProvider.tabBarCurrentIndex
         let tabBar = tabBarProvider.tabBar
         let tabProviders = tabBarProvider.tabProviders
         
@@ -201,7 +201,7 @@ private extension RootController {
             ])
         }
         
-        currentIndex = index
+        tabBarProvider.tabBarCurrentIndex = index
         tabBar.selectedItem = tabBar.items![index]
         if currentController != nil {
             currentController.willMove(toParent: nil)
