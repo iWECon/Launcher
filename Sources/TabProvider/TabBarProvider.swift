@@ -13,16 +13,16 @@ struct TabBarProviderKeys {
 
 public protocol TabBarProvider {
     
-    var tabBar: UITabBar { get set }
+    var tabBar: UITabBar { get }
     
     /// tabbar's tab providers
-    var tabProviders: [TabProvider] { get set }
+    var tabProviders: [TabProvider] { get }
     
     /// index of the tabbar's tab
-    var tabBarCurrentIndex: Int { get set }
+    var tabBarCurrentIndex: Int { get }
     
     /// tabbar selected index initial value
-    var initialTabIdentifier: String? { get set }
+    var initialTabIdentifier: String? { get }
     
     /// setTitleTextAttributes or other something
     func configure(tabBarItems: [UITabBarItem])
