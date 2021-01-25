@@ -35,6 +35,13 @@ open class ApplicationDelegate: UIResponder, UIApplicationDelegate, AppDelegateC
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
     
+    // MARK:- Subclass implemention
+    /// does not need to call super
+    open func prepareRootController(firstLaunch isFirstLaunch: Bool) {
+        fatalError("should be implemention in subclass and does not need to call super.")
+    }
+    open func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController? { nil }
+    
     // MARK:- UIApplicationDelegate
     open func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         Launcher.shared.launch(self, application: application, launchOptions: launchOptions)
