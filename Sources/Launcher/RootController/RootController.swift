@@ -22,6 +22,10 @@ private struct Screen {
 
 open class RootController: UIViewController, UITabBarDelegate {
     
+    deinit {
+        (self as? TabBarProvider)?.tabProviders.forEach({ $0.cleanup() })
+    }
+    
     open override var childForStatusBarStyle: UIViewController? {
         currentController
     }
@@ -101,28 +105,6 @@ open class RootController: UIViewController, UITabBarDelegate {
         tabBarSelectItem(at: initialProvider?.offset ?? 0)
     }
     
-    open func constraintsControllerContainerView() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let topConstraint = NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
-        let leftConstraint = NSLayoutConstraint(item: contentView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -(49 + Screen.safeArea.bottom))
-        
-        view.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
-    }
-    
-    open func constraintsTabBar(tabBar: UITabBar) {
-        tabBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        let leftConstraint = NSLayoutConstraint(item: tabBar, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: tabBar, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: tabBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
-        let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0)
-        
-        view.addConstraints([leftConstraint, rightConstraint, bottomConstraint, topConstraint])
-    }
-    
     /// call when is initial run
     open func initialLoad() {
         
@@ -154,6 +136,31 @@ open class RootController: UIViewController, UITabBarDelegate {
     }
 }
 
+private extension RootController {
+    
+    private func constraintsControllerContainerView() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let topConstraint = NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
+        let leftConstraint = NSLayoutConstraint(item: contentView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
+        let rightConstraint = NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
+        let bottomConstraint = NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -(49 + Screen.safeArea.bottom))
+        
+        view.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
+    }
+    
+    private func constraintsTabBar(tabBar: UITabBar) {
+        tabBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        let leftConstraint = NSLayoutConstraint(item: tabBar, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
+        let rightConstraint = NSLayoutConstraint(item: tabBar, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
+        let bottomConstraint = NSLayoutConstraint(item: tabBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
+        let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0)
+        
+        view.addConstraints([leftConstraint, rightConstraint, bottomConstraint, topConstraint])
+    }
+    
+}
 
 private extension RootController {
     
