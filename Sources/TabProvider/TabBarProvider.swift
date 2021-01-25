@@ -29,7 +29,7 @@ public protocol TabBarProvider {
     
 }
 
-public extension TabBarProvider {
+public extension TabBarProvider where Self: UIResponder {
     
     var tabProviders: [TabProvider] {
         get {
