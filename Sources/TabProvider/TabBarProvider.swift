@@ -32,30 +32,33 @@ public protocol TabBarProvider {
 public extension TabBarProvider where Self: UIViewController {
     
     var tabProviders: [TabProvider] {
-        get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarTabProvidersKey) as? [TabProvider] ?? []
-        }
-        set {
-            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarTabProvidersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
+        []
+//        get {
+//            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarTabProvidersKey) as? [TabProvider] ?? []
+//        }
+//        set {
+//            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarTabProvidersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+//        }
     }
     
     var tabBarCurrentIndex: Int {
-        get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey) as? Int ?? -1
-        }
-        set {
-            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
+        -1
+//        get {
+//            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey) as? Int ?? -1
+//        }
+//        set {
+//            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+//        }
     }
     
     var initialTabIdentifier: String? {
-        get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarInitialIdentifierKey) as? String
-        }
-        set {
-            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarInitialIdentifierKey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
+        nil
+//        get {
+//            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarInitialIdentifierKey) as? String
+//        }
+//        set {
+//            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarInitialIdentifierKey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+//        }
     }
     
     var tabBar: UITabBar {
