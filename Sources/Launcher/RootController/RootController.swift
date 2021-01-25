@@ -133,23 +133,7 @@ open class RootController: UIViewController, UITabBarDelegate {
         tabBarSelectItem(at: item.tag, skipRefresh: false)
     }
     
-    open func segmentedControlDidChange(_ segmentedIndex: Int) {
-        guard segmentedIndex >= 0,
-           let pagable = currentController as? SegmentedControllerable,
-           segmentedIndex < pagable.pages.count
-        else {
-            return
-        }
-        
-        pagable.segmenter.currentIndex = segmentedIndex
-        pagable.pager.currentIndex = segmentedIndex
-    }
-}
-
-
-private extension RootController {
-    
-    func animateTabItemSelection(at index: Int) {
+    open func animateTabItemSelection(at index: Int) {
         guard let tabBar = (self as? TabBarProvider)?.tabBar else { return }
         if index + 1 >= tabBar.subviews.count {
             return
@@ -164,6 +148,14 @@ private extension RootController {
             }, completion: nil)
         }, completion: nil)
     }
+    
+    open func tabBarItemDidChange(to index: Int) {
+        
+    }
+}
+
+
+private extension RootController {
     
     func tabBarSelectItem(at index: Int) {
         tabBarSelectItem(at: index, skipRefresh: false)
@@ -224,11 +216,25 @@ private extension RootController {
         replaceCurrentControllerViewConstraint(currentController.view)
         currentController.didMove(toParent: self)
         setNeedsStatusBarAppearanceUpdate()
+        tabBarItemDidChange(to: index)
         
         segmentedDidChange(segment)
     }
     
-    private func segmentedDidChange(_ segment: Any?) {
+    
+    func segmentedControlDidChange(_ segmentedIndex: Int) {
+        guard segmentedIndex >= 0,
+              let pagable = currentController as? SegmentedControllerable,
+              segmentedIndex < pagable.pages.count
+        else {
+            return
+        }
+        
+        pagable.segmenter.currentIndex = segmentedIndex
+        pagable.pager.currentIndex = segmentedIndex
+    }
+    
+    func segmentedDidChange(_ segment: Any?) {
         guard let segment = segment else {
             return
         }
