@@ -20,7 +20,7 @@ private struct Screen {
     }()
 }
 
-open class RootController: UIViewController, UITabBarDelegate {
+open class RootController: UITabBarController {
     
     deinit {
         (self as? TabBarProvider)?.tabProviders.forEach({ $0.cleanup() })
@@ -36,17 +36,8 @@ open class RootController: UIViewController, UITabBarDelegate {
         return .default
     }
     
-    public var isInitial = false
-    
-    /// return the current tab's root controller
     public private(set) var currentController: UIViewController!
-    public private(set) lazy var contentView = UIView()
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        commonInit()
-    }
+    public var isInitial = false
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -54,9 +45,10 @@ open class RootController: UIViewController, UITabBarDelegate {
         commonInit()
     }
     
-    public convenience init(initial: Bool = false) {
-        self.init(nibName: nil, bundle: nil)
+    required public init(initial: Bool = false) {
+        super.init(nibName: nil, bundle: nil)
         self.isInitial = initial
+        commonInit()
     }
     
     /// do not make time-consuming tasks
@@ -82,25 +74,24 @@ open class RootController: UIViewController, UITabBarDelegate {
         guard let tabBarProvider = self as? TabBarProvider,
               tabBarProvider.tabProviders.count > 0
         else {
+            tabBar.isHidden = true
             return
         }
-        view.addSubview(contentView)
         
-        // constraint contentView
-        constraintsControllerContainerView()
+        tabBar.isTranslucent = false
         
         // install tab providers
+        let controllers = tabBarProvider.tabProviders.map({ $0.controller })
+        for (index, controller) in controllers.enumerated() {
+            let tabItem = tabBarProvider.tabProviders[index].tabBarItem
+            controller.tabBarItem = tabItem
+            controller.tabBarItem.tag = index
+        }
+        setViewControllers(controllers, animated: false)
+        
         // find the intialTabIdentifier's controller
         let initialProvider = tabBarProvider.tabProviders.enumerated().filter({ $0.element.tabIdentifier == tabBarProvider.initialTabIdentifier }).first
         currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller
-        
-        tabBarProvider.tabBar.delegate = self
-        tabBarProvider.tabBar.setItems(tabBarProvider.tabProviders.compactMap({ $0.tabBarItem }), animated: false)
-        for (idx, item) in (tabBarProvider.tabBar.items ?? []).enumerated() {
-            item.tag = idx
-        }
-        view.addSubview(tabBarProvider.tabBar)
-        constraintsTabBar(tabBar: tabBarProvider.tabBar)
         
         tabBarSelectItem(at: initialProvider?.offset ?? 0)
     }
@@ -111,7 +102,7 @@ open class RootController: UIViewController, UITabBarDelegate {
         
     }
     
-    public func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+    public override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         animateTabItemSelection(at: item.tag)
         tabBarSelectItem(at: item.tag, skipRefresh: false)
     }
@@ -137,97 +128,39 @@ open class RootController: UIViewController, UITabBarDelegate {
 }
 
 private extension RootController {
-    
-    private func constraintsControllerContainerView() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let topConstraint = NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
-        let leftConstraint = NSLayoutConstraint(item: contentView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -(49 + Screen.safeArea.bottom))
-        
-        view.addConstraints([topConstraint, leftConstraint, rightConstraint, bottomConstraint])
-    }
-    
-    private func constraintsTabBar(tabBar: UITabBar) {
-        tabBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        let leftConstraint = NSLayoutConstraint(item: tabBar, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: tabBar, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: tabBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
-        let topConstraint = NSLayoutConstraint(item: tabBar, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0)
-        
-        view.addConstraints([leftConstraint, rightConstraint, bottomConstraint, topConstraint])
-    }
-    
-}
 
-private extension RootController {
-    
     func tabBarSelectItem(at index: Int) {
         tabBarSelectItem(at: index, skipRefresh: false)
     }
-    
+
     func tabBarSelectItem(at index: Int, skipRefresh: Bool, segment: Any? = nil) {
         guard var tabBarProvider = self as? TabBarProvider else { return }
         let currentIndex = tabBarProvider.tabBarCurrentIndex
         let tabBar = tabBarProvider.tabBar
         let tabProviders = tabBarProvider.tabProviders
-        
+
         guard index != currentIndex else {
-            
+
             guard !skipRefresh,
                   let refreshable = currentController as? Refreshable
             else {
                 return
             }
-            
+
             refreshable.beginRefreshing()
             segmentedDidChange(segment)
             return
         }
         
-        func replaceCurrentControllerViewConstraint(_ controllerView: UIView) {
-            guard currentController.view != self.view else { return }
-            
-            controllerView.translatesAutoresizingMaskIntoConstraints = false
-            
-            // shit
-            contentView.addConstraints([
-                .init(item: contentView, attribute: .top, relatedBy: .equal, toItem: controllerView, attribute: .top, multiplier: 1, constant: 0),
-                .init(item: controllerView, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1, constant: 0),
-                .init(item: contentView, attribute: .right, relatedBy: .equal, toItem: controllerView, attribute: .right, multiplier: 1, constant: 0),
-                .init(item: controllerView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0),
-            ])
-        }
-        
         tabBarProvider.tabBarCurrentIndex = index
         tabBar.selectedItem = tabBar.items![index]
-        if currentIndex != -1, currentController != nil {
-            currentController.willMove(toParent: nil)
-            currentController.beginAppearanceTransition(false, animated: false)
-            currentController.view.removeFromSuperview()
-            currentController.endAppearanceTransition()
-            currentController.removeFromParent()
-            currentController.didMove(toParent: nil)
-        }
-        let tabProvider = tabProviders[index]
-        var controller = tabProvider.controller
-        if let containerProvider = tabProvider as? ContainerNavigationProvider {
-            controller = containerProvider.wrapContainerNavigationController()
-        }
-        currentController = controller
-        addChild(currentController)
-        currentController.willMove(toParent: self)
-        contentView.addSubview(currentController.view)
-        replaceCurrentControllerViewConstraint(currentController.view)
-        currentController.didMove(toParent: self)
-        setNeedsStatusBarAppearanceUpdate()
-        tabBarItemDidChange(to: index)
         
+        let tabProvider = tabProviders[index]
+        self.currentController = tabProvider.controller
+        
+        tabBarItemDidChange(to: index)
         segmentedDidChange(segment)
     }
-    
     
     func segmentedControlDidChange(_ segmentedIndex: Int) {
         guard segmentedIndex >= 0,
@@ -236,11 +169,11 @@ private extension RootController {
         else {
             return
         }
-        
+
         pagable.segmenter.currentIndex = segmentedIndex
         pagable.pager.currentIndex = segmentedIndex
     }
-    
+
     func segmentedDidChange(_ segment: Any?) {
         guard let segment = segment else {
             return
