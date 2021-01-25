@@ -20,15 +20,7 @@ public class Launcher: UIResponder {
     public func launch(_ appDelegate: UIResponder & UIApplicationDelegate, application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if let prepare = appDelegate as? ApplicationPrepareConfigurable {
-            prepare.applicationPrepare()
-        }
-        
-        if let injects = appDelegate as? InjectsConfigurable {
-            injects.methodSwizzleInjects()
-        }
-        
-        if let tools = appDelegate as? ToolsConfigurable {
-            tools.toolsConfigure()
+            prepare.applicationPrepareConfigure()
         }
         
         // BOLD SIZE

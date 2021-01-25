@@ -4,7 +4,7 @@
 
 import UIKit
 
-public protocol ApplicationDelegateProvider: UIApplicationDelegate {
+@objc public protocol ApplicationDelegateProvider: UIApplicationDelegate {
     
     /// call when will enter foreground
     /// maybe use GeTuiSDK.resetBadge() or other some third party to clear the badges number

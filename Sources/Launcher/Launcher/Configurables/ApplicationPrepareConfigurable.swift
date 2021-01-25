@@ -6,6 +6,6 @@ import UIKit
 
 public protocol ApplicationPrepareConfigurable {
     
-    func applicationPrepare()
+    func applicationPrepareConfigure()
     
 }
