@@ -211,7 +211,7 @@ private extension RootController {
             currentController.removeFromParent()
             currentController.didMove(toParent: nil)
         }
-        let tabProvider = tabProviders[currentIndex]
+        let tabProvider = tabProviders[index]
         var controller = tabProvider.controller
         if let containerProvider = tabProvider as? ContainerNavigationProvider {
             controller = containerProvider.wrapContainerNavigationController()
