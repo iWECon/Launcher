@@ -92,8 +92,7 @@ open class RootController: UIViewController, UITabBarDelegate {
         // install tab providers
         // find the intialTabIdentifier's controller
         let initialProvider = tabBarProvider.tabProviders.enumerated().filter({ $0.element.tabIdentifier == tabBarProvider.initialTabIdentifier }).first
-        // bugfix: set currentController in `tabBarSelectItem`
-        // currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller
+        currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller
         
         tabBarProvider.tabBar.delegate = self
         tabBarProvider.tabBar.setItems(tabBarProvider.tabProviders.compactMap({ $0.tabBarItem }), animated: false)
@@ -204,7 +203,7 @@ private extension RootController {
         
         tabBarProvider.tabBarCurrentIndex = index
         tabBar.selectedItem = tabBar.items![index]
-        if currentController != nil {
+        if currentIndex != -1, currentController != nil {
             currentController.willMove(toParent: nil)
             currentController.beginAppearanceTransition(false, animated: false)
             currentController.view.removeFromSuperview()
