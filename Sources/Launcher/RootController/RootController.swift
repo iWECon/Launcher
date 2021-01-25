@@ -153,7 +153,6 @@ private extension RootController {
         }
         
         tabBarProvider.tabBarCurrentIndex = index
-        tabBar.selectedItem = tabBar.items![index]
         
         let tabProvider = tabProviders[index]
         self.currentController = tabProvider.controller
