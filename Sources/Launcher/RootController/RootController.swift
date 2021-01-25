@@ -84,8 +84,8 @@ open class RootController: UITabBarController {
         let controllers = tabBarProvider.tabProviders.map({ $0.controller })
         for (index, controller) in controllers.enumerated() {
             let tabItem = tabBarProvider.tabProviders[index].tabBarItem
+            tabItem.tag = index
             controller.tabBarItem = tabItem
-            controller.tabBarItem.tag = index
         }
         setViewControllers(controllers, animated: false)
         
@@ -108,7 +108,6 @@ open class RootController: UITabBarController {
     }
     
     open func animateTabItemSelection(at index: Int) {
-        guard let tabBar = (self as? TabBarProvider)?.tabBar else { return }
         if index + 1 >= tabBar.subviews.count {
             return
         }
@@ -125,6 +124,13 @@ open class RootController: UITabBarController {
     
     /// override in subclass
     open func tabBarItemDidChange(to index: Int) { }
+    
+    override open func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        navigationController?.isNavigationBarHidden = true
+    }
+    
 }
 
 private extension RootController {
@@ -136,7 +142,6 @@ private extension RootController {
     func tabBarSelectItem(at index: Int, skipRefresh: Bool, segment: Any? = nil) {
         guard var tabBarProvider = self as? TabBarProvider else { return }
         let currentIndex = tabBarProvider.tabBarCurrentIndex
-        let tabBar = tabBarProvider.tabBar
         let tabProviders = tabBarProvider.tabProviders
 
         guard index != currentIndex else {
