@@ -4,6 +4,17 @@
 
 import UIKit
 
+/**
+ 将 AppDelegate 继承自 ApplicationDelegate
+ 
+ 然后实现下列方法（二选一）:
+ 
+ /// 自动设置根控制器，业务功能简单的情况下可以用方法直接处理, 返回 Controller 后 自动设置 window.rootViewController
+ func autoSetRootController(firstLaunch isFirstLaunch: Bool) -> UIViewController?
+ 
+ /// 业务逻辑复杂的可以走这个自定义，需要手动设置：window.rootViewController
+ func prepareRootController(firstLaunch isFirstLaunch: Bool)
+ */
 open class ApplicationDelegate: UIResponder, UIApplicationDelegate, AppDelegateConfigurable {
     
     open var window: UIWindow? = nil
@@ -25,6 +36,10 @@ open class ApplicationDelegate: UIResponder, UIApplicationDelegate, AppDelegateC
     }
     
     // MARK:- UIApplicationDelegate
+    open func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        Launcher.shared.launch(self, application: application, launchOptions: launchOptions)
+    }
+    
     open func applicationDidBecomeActive(_ application: UIApplication) {
         delegates.forEach({ $0.applicationDidBecomeActive?(application) })
     }
