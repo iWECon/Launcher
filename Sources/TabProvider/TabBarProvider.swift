@@ -16,47 +16,20 @@ public protocol TabBarProvider {
     var tabBar: UITabBar { get }
     
     /// tabbar's tab providers
-    var tabProviders: [TabProvider] { get }
+    var tabProviders: [TabProvider] { get set }
     
     /// index of the tabbar's tab
-    var tabBarCurrentIndex: Int { get }
+    var tabBarCurrentIndex: Int { get set }
     
     /// tabbar selected index initial value
-    var initialTabIdentifier: String? { get }
+    var initialTabIdentifier: String? { get set }
     
     /// setTitleTextAttributes or other something
     func configure(tabBarItems: [UITabBarItem])
     
 }
 
-public extension TabBarProvider where Self: UIResponder {
-    
-    var tabProviders: [TabProvider] {
-        get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarTabProvidersKey) as? [TabProvider] ?? []
-        }
-        set {
-            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarTabProvidersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    var tabBarCurrentIndex: Int {
-        get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey) as? Int ?? -1
-        }
-        set {
-            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarCurrentIndexkey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-    }
-    
-    var initialTabIdentifier: String? {
-        get {
-            objc_getAssociatedObject(self, &TabBarProviderKeys.tabBarInitialIdentifierKey) as? String
-        }
-        set {
-            objc_setAssociatedObject(self, &TabBarProviderKeys.tabBarInitialIdentifierKey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
+public extension TabBarProvider {
     
     var tabBar: UITabBar {
         get {
