@@ -5,20 +5,8 @@
 import UIKit
 import TabProvider
 import Pager
+import Segmenter
 import SegmentedController
-
-private struct Screen {
-    static var safeArea: UIEdgeInsets = {
-        if #available(iOS 11.0, *) {
-            let h = UIApplication.shared.statusBarFrame.height
-            if h == 20 {
-                return .zero
-            }
-            return Launcher.shared.window.safeAreaInsets
-        }
-        return .zero
-    }()
-}
 
 open class RootController: UITabBarController {
     
@@ -55,6 +43,12 @@ open class RootController: UITabBarController {
     /// you can listen some notify
     /// call before viewDidLoad
     open func commonInit() {
+        
+    }
+    
+    /// call when is initial run
+    /// override in subclass
+    open func initialLoad() {
         
     }
     
@@ -96,10 +90,23 @@ open class RootController: UITabBarController {
         tabBarSelectItem(at: initialProvider?.offset ?? 0)
     }
     
-    /// call when is initial run
-    /// override in subclass
-    open func initialLoad() {
+    /// Change the tabBar selected tab.
+    /// - Parameters:
+    ///   - index: Tab index.
+    ///   - segmentIndex: Segmenter index, if segmenter exists.
+    open func selectItem(item index: Int, segment segmentIndex: Int = -1) {
+        let tabIndex = max(0, min(index, (tabBar.items ?? []).count))
+        self.selectedIndex = tabIndex
+        self.currentController = (viewControllers ?? [])[tabIndex]
         
+        guard segmentIndex >= 0,
+              let segmentedable = self.currentController as? Segmentedable,
+              segmentIndex < segmentedable.segmenter.segments.count
+        else {
+            return
+        }
+        
+        self.segmentedDidChange(segmentIndex)
     }
     
     public override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
@@ -173,7 +180,7 @@ private extension RootController {
         else {
             return
         }
-
+        
         pagable.segmenter.currentIndex = segmentedIndex
         pagable.pager.currentIndex = segmentedIndex
     }
