@@ -81,11 +81,14 @@ open class RootController: UITabBarController {
             tabItem.tag = index
             controller.tabBarItem = tabItem
         }
+        
         setViewControllers(controllers, animated: false)
+        (self as? TabBarProvider)?.configure(tabBarItems: controllers.compactMap({ $0.tabBarItem }))
         
         // find the intialTabIdentifier's controller
         let initialProvider = tabBarProvider.tabProviders.enumerated().filter({ $0.element.tabIdentifier == tabBarProvider.initialTabIdentifier }).first
-        currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller
+        self.selectedIndex = initialProvider?.offset ?? 0
+        self.currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller
         
         tabBarSelectItem(at: initialProvider?.offset ?? 0)
     }
@@ -140,13 +143,13 @@ open class RootController: UITabBarController {
     
 }
 
-private extension RootController {
+extension RootController {
 
-    func tabBarSelectItem(at index: Int) {
+    open func tabBarSelectItem(at index: Int) {
         tabBarSelectItem(at: index, skipRefresh: false)
     }
-
-    func tabBarSelectItem(at index: Int, skipRefresh: Bool, segment: Any? = nil) {
+    
+    open func tabBarSelectItem(at index: Int, skipRefresh: Bool, segment: Any? = nil) {
         guard var tabBarProvider = self as? TabBarProvider else { return }
         let currentIndex = tabBarProvider.tabBarCurrentIndex
         let tabProviders = tabBarProvider.tabProviders
@@ -167,13 +170,14 @@ private extension RootController {
         tabBarProvider.tabBarCurrentIndex = index
         
         let tabProvider = tabProviders[index]
+        self.selectedIndex = index
         self.currentController = tabProvider.controller
         
         tabBarItemDidChange(to: index)
         segmentedDidChange(segment)
     }
     
-    func segmentedControlDidChange(_ segmentedIndex: Int) {
+    open func segmentedControlDidChange(_ segmentedIndex: Int) {
         guard segmentedIndex >= 0,
               let pagable = currentController as? SegmentedControllerable,
               segmentedIndex < pagable.pages.count
@@ -185,7 +189,7 @@ private extension RootController {
         pagable.pager.currentIndex = segmentedIndex
     }
 
-    func segmentedDidChange(_ segment: Any?) {
+    open func segmentedDidChange(_ segment: Any?) {
         guard let segment = segment else {
             return
         }
