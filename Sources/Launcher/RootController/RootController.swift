@@ -18,10 +18,7 @@ open class RootController: UITabBarController {
         currentController
     }
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        if let current = currentController {
-            return current.preferredStatusBarStyle
-        }
-        return .default
+        childForStatusBarStyle?.preferredStatusBarStyle ?? .default
     }
     
     public private(set) var currentController: UIViewController!
@@ -170,8 +167,9 @@ extension RootController {
         tabBarProvider.tabBarCurrentIndex = index
         
         let tabProvider = tabProviders[index]
-        self.selectedIndex = index
+        // bugfix: preferred status bar style
         self.currentController = tabProvider.controller
+        self.selectedIndex = index
         
         tabBarItemDidChange(to: index)
         segmentedDidChange(segment)
