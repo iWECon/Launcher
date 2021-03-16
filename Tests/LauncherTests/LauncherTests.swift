@@ -6,9 +6,6 @@ final class LaunchTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        
-        let r = RootController()
-        r.viewDidLoad()
     }
 
     static var allTests = [

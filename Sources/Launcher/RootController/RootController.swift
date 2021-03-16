@@ -22,28 +22,20 @@ open class RootController: UITabBarController {
     }
     
     public private(set) var currentController: UIViewController!
-    public var isInitial = false
+    @IBInspectable public var isInitial = false
     
-    required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
-        commonInit()
-    }
-    
-    required public init(initial: Bool = false) {
-        super.init(nibName: nil, bundle: nil)
+    public convenience init(initial: Bool) {
+        self.init()
         self.isInitial = initial
-        commonInit()
     }
     
     /// do not make time-consuming tasks
     /// you can listen some notify
-    /// call before viewDidLoad
     open func commonInit() {
         
     }
     
-    /// call when is initial run
+    /// call it when is initial
     /// override in subclass
     open func initialLoad() {
         
@@ -51,6 +43,8 @@ open class RootController: UITabBarController {
     
     open override func viewDidLoad() {
         super.viewDidLoad()
+        
+        commonInit()
         
         if isInitial {
             // do something for initial
