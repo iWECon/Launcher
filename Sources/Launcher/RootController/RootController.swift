@@ -3,10 +3,12 @@
 //
 
 import UIKit
-import TabProvider
 import Pager
 import Segmenter
 import SegmentedController
+#if SWIFT_PACKAGE
+import TabProvider
+#endif
 
 open class RootController: UITabBarController {
     
