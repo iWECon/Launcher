@@ -4,7 +4,9 @@
 
 import UIKit
 import RTNavigationController
+#if SWIFT_PACKAGE
 import TabProvider
+#endif
 
 public protocol ContainerNavigationProvider {
     
