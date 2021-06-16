@@ -35,7 +35,13 @@ open class RootController: UITabBarController {
     
     /// call it when is initial
     /// override in subclass
+    /// do not to call other UIWindow
     open func initialLoad() { }
+    
+    /// call here when first to call `viewDidLayoutSubviews`
+    /// override in subclass
+    /// can call other UIWindow in here
+    open func initialDidLoad() { }
     
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,6 +130,10 @@ open class RootController: UITabBarController {
         super.viewWillLayoutSubviews()
         
         navigationController?.isNavigationBarHidden = true
+        
+        guard isInitial else { return }
+        isInitial = false
+        initialDidLoad()
     }
     
 }
