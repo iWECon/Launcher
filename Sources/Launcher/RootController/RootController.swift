@@ -35,22 +35,25 @@ open class RootController: UITabBarController {
         super.init(coder: coder)
     }
     
-    /// call it when is initial
+    /// 首次加载 RootController 已走完 `viewDidLoad` 且 `isInitial = true` 时触发
+    /// call it when `viewDidLoad` trigger after and `isInitial = true`
     /// override in subclass
-    /// do not to call other UIWindow
-    open func initialLoad() { }
-    
-    /// call here when first to call `viewDidLayoutSubviews`
-    /// override in subclass
-    /// can call other UIWindow in here
     open func initialDidLoad() { }
+    
+    /// 每次加载 RootController, 触发 `viewDidLoad` 时都会触发
+    /// call it when `viewDidLoad` trigger after
+    /// override in subclass
+    open func thenDidLoad() { }
     
     open override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isInitial {
-            // do something for initial
-            initialLoad()
+        defer {
+            if isInitial {
+                isInitial = false
+                DispatchQueue.main.async { self.initialDidLoad() }
+            }
+            DispatchQueue.main.async { self.thenDidLoad() }
         }
         
         navigationController?.isNavigationBarHidden = true
@@ -132,10 +135,6 @@ open class RootController: UITabBarController {
         super.viewWillLayoutSubviews()
         
         navigationController?.isNavigationBarHidden = true
-        
-        guard isInitial else { return }
-        isInitial = false
-        initialDidLoad()
     }
     
 }
