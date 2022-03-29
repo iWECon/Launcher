@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name = 'Launcher'
-    s.version = '1.0.6'
+    s.version = '2.0.0'
     s.license = { :type => 'MIT' }
     s.homepage = 'https://github.com/iWECon/Launcher'
     s.authors = 'iWw'
