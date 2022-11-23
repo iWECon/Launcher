@@ -60,7 +60,29 @@ open class RootController: UITabBarController {
         
         setNeedsStatusBarAppearanceUpdate()
         
-        reloadTabBar()
+        setupTabBar()
+        initialTabBar()
+    }
+    
+    open func setupTabBar() {
+        guard let tabBarProvider = self as? TabBarProvider,
+              !tabBarProvider.tabProviders.isEmpty
+        else {
+            tabBar.isHidden = true
+            return
+        }
+        tabBar.isTranslucent = false
+    }
+    
+    open func initialTabBar() {
+        // setup tab bar
+        guard let tabBarProvider = self as? TabBarProvider,
+              !tabBarProvider.tabProviders.isEmpty
+        else {
+            return
+        }
+        installTabProviders(tabBarProvider: tabBarProvider)
+        setupInitialTab(tabBarProvider: tabBarProvider)
     }
     
     /// If change provider.tabProviders,
@@ -68,15 +90,11 @@ open class RootController: UITabBarController {
     open func reloadTabBar() {
         // setup tab bar
         guard let tabBarProvider = self as? TabBarProvider,
-              tabBarProvider.tabProviders.count > 0
+              !tabBarProvider.tabProviders.isEmpty
         else {
-            tabBar.isHidden = true
             return
         }
-        tabBar.isTranslucent = false
-        
         installTabProviders(tabBarProvider: tabBarProvider)
-        setupInitialTab(tabBarProvider: tabBarProvider)
     }
     
     /// install tab providers
