@@ -60,6 +60,12 @@ open class RootController: UITabBarController {
         
         setNeedsStatusBarAppearanceUpdate()
         
+        reloadTabBar()
+    }
+    
+    /// If change provider.tabProviders,
+    /// call `reloadTabBar` to refresh.
+    open func reloadTabBar() {
         // setup tab bar
         guard let tabBarProvider = self as? TabBarProvider,
               tabBarProvider.tabProviders.count > 0
@@ -67,10 +73,14 @@ open class RootController: UITabBarController {
             tabBar.isHidden = true
             return
         }
-        
         tabBar.isTranslucent = false
         
-        // install tab providers
+        installTabProviders(tabBarProvider: tabBarProvider)
+        setupInitialTab(tabBarProvider: tabBarProvider)
+    }
+    
+    /// install tab providers
+    open func installTabProviders(tabBarProvider: TabBarProvider) {
         let controllers = tabBarProvider.tabProviders.map({ $0.controller })
         for (index, controller) in controllers.enumerated() {
             let tabItem = tabBarProvider.tabProviders[index].tabBarItem
@@ -80,8 +90,10 @@ open class RootController: UITabBarController {
         
         setViewControllers(controllers, animated: false)
         (self as? TabBarProvider)?.configure(tabBarItems: controllers.compactMap({ $0.tabBarItem }))
-        
-        // find the intialTabIdentifier's controller
+    }
+    
+    /// find the intialTabIdentifier's controller
+    open func setupInitialTab(tabBarProvider: TabBarProvider) {
         let initialProvider = tabBarProvider.tabProviders.enumerated().filter({ $0.element.tabIdentifier == tabBarProvider.initialTabIdentifier }).first
         self.selectedIndex = initialProvider?.offset ?? 0
         self.currentController = initialProvider?.element.controller ?? tabBarProvider.tabProviders.first!.controller

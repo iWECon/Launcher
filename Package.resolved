@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/iWECon/SegmentedController",
         "state": {
           "branch": null,
-          "revision": "21d1bc4330a91f736ac74cddb182e4bb5921afd4",
-          "version": "1.2.3"
+          "revision": "494aee88fbe85eb020eea854f00a0c97f30f88d8",
+          "version": "2.0.1"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/iWECon/Segmenter",
         "state": {
           "branch": null,
-          "revision": "6e6ebf035823db897b172fe2f02d5c3c7b00002c",
-          "version": "1.5.4"
+          "revision": "e547c4100f6c6cdf2bf384aa4d98717b015fba02",
+          "version": "2.0.1"
         }
       },
       {
