@@ -147,7 +147,8 @@ open class RootController: UITabBarController {
         if index + 1 >= tabBar.subviews.count {
             return
         }
-        let iconView = tabBar.subviews[index + 1]
+        let sortedSubviews = tabBar.subviews.sorted(by: { $0.frame.origin.x < $1.frame.origin.x })
+        let iconView = sortedSubviews[index + 1]
         UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [.curveEaseInOut, .allowUserInteraction], animations: {
             iconView.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
             
